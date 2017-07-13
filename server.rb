@@ -1,4 +1,5 @@
 require 'socket'
+require 'colorize'
 
 class Server
   def initialize(port, ip)
@@ -20,11 +21,12 @@ class Server
         @connections[:clients].each do |other_name, other_client|
           if nick_name == other_name || client == other_client
             client.puts 'Пользователь с таким именем уже существует'
+
             Thread.kill self
           end
         end
 
-        puts "#{nick_name} #{client}"
+        puts "#{nick_name} #{client}".colorize(:green)
 
         @connections[:clients][nick_name] = client
 
@@ -43,8 +45,10 @@ class Server
         begin
           other_client.puts "#{username.to_s}: #{msg}" unless other_name == username
         rescue => error
-          puts "#{error.message}: "
-          print "#{other_name} отключился" if error.message == 'Broken pipe'
+          print "#{error.message}: ".colorize(:red)
+
+          puts "#{other_name} отключился".colorize(:red) if error.message == 'Broken pipe'
+
           @connections[:clients].delete(other_name)
         end
       end
