@@ -1,4 +1,5 @@
 require 'socket'
+require 'colorize'
 
 class Client
   def initialize(server)
@@ -22,9 +23,10 @@ class Client
 
   def send
     puts 'Введите имя пользовалтеля'
+    nick_name_color = String.colors.sample
     @request = Thread.new do
       loop {
-        msg = STDIN.gets.chomp
+        msg = STDIN.gets.chomp.colorize(nick_name_color)
         @server.puts(msg)
       }
     end
