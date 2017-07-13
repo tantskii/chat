@@ -23,10 +23,9 @@ class Client
 
   def send
     puts 'Введите имя пользовалтеля'
-    nick_name_color = String.colors.sample
     @request = Thread.new do
       loop {
-        msg = STDIN.gets.chomp.colorize(nick_name_color)
+        msg = STDIN.gets.chomp
         @server.puts(msg)
       }
     end
