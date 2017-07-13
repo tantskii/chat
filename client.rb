@@ -6,6 +6,7 @@ class Client
     @server   = server
     @request  = nil
     @response = nil
+
     listen
     send
     @request.join
@@ -16,7 +17,7 @@ class Client
     @response = Thread.new do
       loop {
         msg = @server.gets.chomp
-        puts "#{msg}"
+        puts "#{msg}".colorize(:light_blue)
       }
     end
   end

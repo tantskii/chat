@@ -42,7 +42,8 @@ class Server
           @connections[:rooms][name_of_room] << {nick_name => client}
         end
 
-        puts "#{name_of_room} участники: " + @connections[:rooms][name_of_room].map(&:keys).join(', ')
+        puts "#{name_of_room}".colorize(:blue) +
+                 " участники: " + @connections[:rooms][name_of_room].map(&:keys).join(', ')
 
         listen_user_messages(nick_name, client, name_of_room)
       end
