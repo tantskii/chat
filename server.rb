@@ -4,8 +4,8 @@ class Server
   def initialize(port, ip)
     @server                = TCPServer.open(ip, port)
     @connections           = {}
-    @rooms                 = {}
-    @clients               = {}
+    @rooms                 = {} # { room_name: [clients_names], ... }
+    @clients               = {} # { client_name: {client}, ... },
     @connections[:server]  = @server
     @connections[:rooms]   = @rooms
     @connections[:clients] = @clients
@@ -40,7 +40,13 @@ class Server
       msg = client.gets.chomp
 
       @connections[:clients].each do |other_name, other_client|
-        other_client.puts "#{username.to_s}: #{msg}" unless other_name == username
+        begin
+          other_client.puts "#{username.to_s}: #{msg}" unless other_name == username
+        rescue => error
+          puts "#{error.message}: "
+          print "#{other_name} отключился" if error.message == 'Broken pipe'
+          @connections[:clients].delete(other_name)
+        end
       end
     }
   end
